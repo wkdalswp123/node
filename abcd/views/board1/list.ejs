@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> board </title>
+<h1> 　Board - Node.js & MySql</h1>
+
+
+
+
+</head>
+
+<body>
+  <div style = "padding: 6px 5px 0px 580px;">
+
+  </div>
+</body>
+
+<nav id="topMenu" > <ul> <li><a class="menuLink" href="/board1">Intro</a></li> <li><a class="menuLink" href="/board1/list">Board</a></li> <li><a class="menuLink" href="/board1/welcome">회원가입</a></li> <li><% if(isAuthenticated){%>
+
+  	<a class="menuLink" href="/board1/logout">로그아웃</a>
+
+<% } else {%>
+<a class="menuLink" href="/board1/login">로그인</a>
+
+<% } %></li> </ul> </nav>
+
+<style> #topMenu {  height: 30px;width: 850px; }
+ #topMenu ul li { list-style: none; color: white;  background-color: #2d2d2d;  float: left; line-height: 30px;  vertical-align: middle; text-align: center;
+   } #topMenu .menuLink {  text-decoration:none;  color: white; display: block;  width: 150px;  font-size: 20px; font-weight: bold;  font-family: "Trebuchet MS", Dotum, Arial; }
+   #topMenu .menuLink:hover { color: red;  background-color: #4d4d4d; } </style>
+
+
+
+   <div style = "padding: 6px 5px 35px 580px;">
+
+   </div>
+
+<table style = "margin-left:40px" border="1"  >
+
+    <colgroup>
+        <col width='8%' />
+        <col width='*%' />
+        <col width='15%' />
+        <col width='15%' />
+    </colgroup>
+    <thead>
+        <tr>
+            <th><a>번호</a></th>
+            <th>제목</th>
+            <th>등록자</th>
+            <th>등록일</th>
+        </tr>
+    </thead>
+    <tbody>
+    <%
+         for(var i=0; i<rows.length; i++) {
+    %>
+        <tr>
+            <td><%=rows[i].BRDNO%></td>
+            <td><a href='/board1/read?brdno=<%=rows[i].BRDNO%>'><%=rows[i].BRDTITLE%></a></td>
+            <td><%=rows[i].name%></td>
+            <td><%=rows[i].BRDDATE%></td>
+        </tr>
+    <%
+         }
+    %>
+    </tbody>
+</table>
+
+
+<div>
+    <button
+        type="button"
+        style=" margin-top: 20px; margin-left: 40px;    color: gold; background:black; font-size:1em;"
+        onclick="location.href='http://localhost:3000/board1/form' ">글쓰기</button>
+
+    <form action="/board1/search" id = "searchAction" style="text-align:center" method="get">
+        <input type="text" name="searchWord">
+        <input type="submit" value="등록자검색">
+    </form>
+</div>
+
+
+</html>

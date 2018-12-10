@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> board </title>
+<h1> 　Board - Node.js & MySql</h1>
+</head>
+<body>
+  
+
+<nav id="topMenu" >
+  <ul>
+    <li>
+      <a class="menuLink" href="/board1">Intro</a>
+    </li>
+    <li>
+      <a class="menuLink" href="/board1/list">Board</a>
+    </li>
+    <li>
+      <a class="menuLink" href="/board1/welcome">회원가입</a>
+    </li>
+    <li>
+      <% if(isAuthenticated){%>
+	       <a class="menuLink" href="/board1/logout">로그아웃</a>
+     <% } else {%>
+         <a class="menuLink" href="/board1/login">로그인</a>
+    <% } %>
+         </li> </ul> </nav>
+
+<style> #topMenu {  height: 30px;width: 850px; }
+        #topMenu ul li { list-style: none; color: white;  background-color: #2d2d2d;  float: left; line-height: 30px;  vertical-align: middle; text-align: center;}
+        #topMenu .menuLink {  text-decoration:none;  color: white; display: block;  width: 150px;  font-size: 20px; font-weight: bold;  font-family: "Trebuchet MS", Dotum, Arial; }
+        #topMenu .menuLink:hover { color: red;  background-color: #4d4d4d; } </style>
+
+<div style = "padding: 5px 4px 40px 4px;">
+</div>
+  <h2> 디자인 패턴 과제 </h2>
+  <h3> 　C.R.U.D </h3>
+</body>
+</html>

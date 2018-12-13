@@ -2,9 +2,6 @@ var passport   = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 
-
-
-
 //   MySQL 로드
 var mysql = require('mysql');
 var pool = mysql.createPool({
@@ -15,12 +12,13 @@ var pool = mysql.createPool({
     database : 'my_db'
 });
 
-// serialize & deserialize User // 2
+// passport sereializeUser 구현
 passport.serializeUser(function(user, done) {
   console.log('serializeUser', user);
  done(null, user.name);
 });
 
+// passport desereializeUser 구현
 passport.deserializeUser(function(id, done) {
   console.log('dserializeUser', id);
   pool.getConnection(function (err, connection) {
@@ -35,15 +33,15 @@ passport.deserializeUser(function(id, done) {
 
 
 
-// local strategy // 3
+//passport 사용
 passport.use(new LocalStrategy({
-   usernameField : "username", // 3-1
+   usernameField : "username", 
    passwordField : "password"
  }, function(username, password, done) {
 
    pool.getConnection(function (err, connection) {
 
-      // 3-2
+
     connection.query ("select * from tbl_users where name = ?", username, function(err, rows){
       var user = rows[0];
       if(err) {

@@ -15,13 +15,12 @@ var pool = mysql.createPool({
 });
 
 
-
-
+//회원가입 화면
 router.get('/welcome', function (req, res, next) {
     res.render('board1/welcome');
 });
 
-
+//회원가입 정보 
 router.post('/welcome', function (req, res, next) {
       var data = [req.body.userId, req.body.userPw];
       console.log("rows : " + data);
@@ -38,46 +37,13 @@ router.post('/welcome', function (req, res, next) {
       });
 });
 
-/*
-router.post('/login', function (req, res, next) {
-      var id = req.body.username;
-      var pw = req.body.password;
-
-      var sql = 'select * from tbl_users where name=?';
-
-      pool.getConnection(function (err, connection) {
-        connection.query(sql, [id] , function(err, rows) {
-            if(err)
-              console.log(err);
-            if(!rows[0])
-              return res.send('please check your id');
-            var user = rows[0];
-            if(user.password == [pw]){
-              req.session.is_logined = true;
-              req.session.name = user.name;
-
-              res.render('index', {row: rows[0]});
-
-              console.log("로그인 성공!\n");
-              console.log("id =" + [id] + "  pw =" + [pw] );
-              res.redirect('/');
-            }
-            else {
-
-              return res.send('plase check your password');
-            }
-          });
-      });
-});
-*/
-
+//로그인 화면
 router.get('/login',  function (req, res, next) {
 
     res.render('board1/login');
 });
 
-
-
+// 로그인 정보 passport
 router.post('/login',
  passport.authenticate('local', {
   successRedirect : '/board1',
@@ -85,14 +51,14 @@ router.post('/login',
  }
 ));
 
+// 로그아웃 구현
 router.get("/logout", function(req, res) {
  req.logout();
  res.redirect("/board1");
 });
 
 
-//잠깐만 페이징 구현
-
+// 게시판 목록 구현
 router.get('/list', function(req,res,next){
     pool.getConnection(function (err, connection) {
         var sql = "SELECT B.BRDNO, B.BRDTITLE, U.name,  DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE FROM TBL_BOARD AS B JOIN TBL_USERS AS U ON B.brdWRITER = U.id;";
@@ -105,25 +71,8 @@ router.get('/list', function(req,res,next){
         });
     });
 });
-/*
-router.get('/bye', function(req,res,next){
-    var data = req.user.id;
 
-    pool.getConnection(function (err, connection) {
-            var sql = "delete from tbl_board where brdwriter id = ?" ;
-            var sql2 = "delete from tbl_users where id = ?" ;
-
-            connection.query(sql,data ,sql2, data, function (err, rows) {
-                if (err) console.error("err : " + err);
-
-                res.redirect('/board1/list');
-                connection.release();
-            });
-    });
-});*/
-
-
-
+// 게시판 검색 기능
 router.get('/search', function(req,res,next){
     var dt = req.query.searchWord;
 
@@ -139,40 +88,8 @@ router.get('/search', function(req,res,next){
         });
     });
 });
-/*
-router.get('/list/:cur', function(req,res,next){
 
-    var page_size = 10;
-    var page_list_size = 3;
-    var no = "";
-    var totalPageCount = 0;
-
-
-    pool.getConnection(function (err, connection) {
-        var sql = "select count(*) as cnt from tbl_board";
-        connection.query(sql, function (err, rows) {
-            if (err){
-              console.error("err : " + err);
-              return
-            }
-
-            totalPageCount = rows[0].cnt;
-            var curPage = req.params.cur;
-
-            if(totalPageCount <0) {
-              totalPageCount = 0;
-            }
-
-
-
-//            console.log("rows : " + JSON.stringify(rows));
-
-            res.render('board1/list', {rows: rows?rows:{}});
-            connection.release();
-        });
-    });
-});*/
-
+//게시판 수정 화면
 router.get('/read', function(req,res,next){
     pool.getConnection(function (err, connection) {
         var sql = "SELECT B.BRDNO, B.BRDTITLE, BRDMEMO, U.name,  DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE FROM TBL_BOARD AS B JOIN TBL_USERS AS U WHERE B.brdWRITER = U.id AND BRDNO=" + req.query.brdno;
@@ -187,6 +104,7 @@ router.get('/read', function(req,res,next){
     });
 });
 
+// 게시판 수정 기능
 router.get('/form', function(req,res,next){
     if (!req.query.brdno) {
         res.render('board1/form', {row: ""});
@@ -205,6 +123,7 @@ router.get('/form', function(req,res,next){
     });
 });
 
+//게시판 저장기능
 router.post('/save', function(req,res,next){
 
 
@@ -239,21 +158,7 @@ router.post('/save', function(req,res,next){
     });
 });
 
-/*
-router.get('/delete', function(req,res,next){
-    pool.getConnection(function (err, connection) {
-        var sql = "DELETE FROM TBL_BOARD" +
-                  " WHERE BRDNO=" + req.query.brdno;
-        connection.query(sql, function (err, rows) {
-            if (err) console.error("err : " + err);
-
-            res.redirect('/board1/list');
-            connection.release();
-        });
-    });
-});*/
-
-
+//게시판 삭제 기능
 router.get('/delete', function(req,res,next){
     pool.getConnection(function (err, connection) {
         if(req.user) {
